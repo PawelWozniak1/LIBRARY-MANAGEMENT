@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Books & Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Manage Books & Users</h1>
+
+        <div class="section">
+            <h2>Add User</h2>
+            <form method="POST">
+                <label for="user_name">User Name:</label>
+                <input type="text" name="user_name" placeholder="Enter user name" required>
+
+                <label for="user_email">User Email:</label>
+                <input type="email" name="user_email" placeholder="Enter user email" required>
+
+                <button type="submit" name="add_user" class="btn-primary">➕ Add User</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Add Book</h2>
+            <form method="POST">
+                <label for="book_title">Book Title:</label>
+                <input type="text" name="book_title" placeholder="Enter book title" required>
+
+                <label for="book_author">Author:</label>
+                <input type="text" name="book_author" placeholder="Enter author's name" required>
+
+                <label for="book_isbn">ISBN:</label>
+                <input type="text" name="book_isbn" placeholder="Enter ISBN" required>
+
+                <button type="submit" name="add_book" class="btn-primary">📖 Add Book</button>
+            </form>
+        </div>
+
+        <a href="{{ url_for('index') }}" class="btn-secondary">⬅ Back to Home</a>
+    </div>
+</body>
+</html>

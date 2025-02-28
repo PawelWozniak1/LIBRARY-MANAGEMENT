@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Export Data</h1>
+        <p>Select a date range to export list of borrowed books as an Excel file.</p>
+
+        <div class="section">
+            <form method="POST">
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" required>
+
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" required>
+
+                <button type="submit" class="btn-primary">⬇ Download Excel</button>
+            </form>
+        </div>
+
+        <a href="{{ url_for('index') }}" class="btn-secondary">⬅ Back to Home</a>
+    </div>
+</body>
+</html>

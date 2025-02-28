@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Library Management System</h1>
+        <p>Welcome to the Library Management System! Manage books and users, borrow and return books, and export data with ease.</p>
+        <nav class="nav-menu">
+            <a href="{{ url_for('manage') }}" class="btn-manage">
+                <span>📖 Manage Books & Users</span>
+            </a>
+            <a href="{{ url_for('borrow') }}" class="btn-borrow">
+                <span>🔄 Borrow & Return</span>
+            </a>
+            <a href="{{ url_for('export') }}" class="btn-export">
+                <span>📂 Export Data</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

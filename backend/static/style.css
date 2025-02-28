@@ -1,0 +1,172 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    font-size: 24px;
+}
+
+h2 {
+    color: #555;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.section {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #444;
+    align-self: flex-start;
+    margin-left: 10px;
+}
+
+select, input, input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* Przycisk uniwersalny */
+button, .btn-primary, .btn-secondary {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin: 10px auto;
+}
+
+button {
+    background: #007bff;
+    color: white;
+}
+
+button:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Przycisk główny */
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: scale(1.08);
+}
+
+/* Przycisk drugorzędny */
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: scale(1.05);
+}
+
+/* Nawigacja */
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.nav-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Przyciski indywidualnie */
+.btn-manage {
+    background: #007bff;
+    color: white;
+}
+
+.btn-manage:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn-borrow {
+    background: #28a745;
+    color: white;
+}
+
+.btn-borrow:hover {
+    background: #1e7e34;
+    transform: scale(1.05);
+}
+
+.btn-export {
+    background: #ffc107;
+    color: black;
+}
+
+.btn-export:hover {
+    background: #e0a800;
+    transform: scale(1.05);
+}
+
+/* Poprawione ikony w przyciskach */
+.nav-menu a i {
+    margin-right: 8px;
+}
