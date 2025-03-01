@@ -24,6 +24,3 @@ CREATE TABLE IF NOT EXISTS loans (
     FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
--- Index to speed up lookups on available books
-CREATE INDEX idx_books_available ON books (available);
