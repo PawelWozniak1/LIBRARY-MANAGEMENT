@@ -3,6 +3,8 @@
 ## Overview
 The **Library Management System** is a simple yet powerful web application that allows users to manage books, users, and borrowing operations efficiently. Built using **Flask**, **HTML**, **CSS**, and **Bootstrap**, this project provides a user-friendly interface for library administrators.
 
+**Live Demo:** [Library Management System](http://147.135.209.140:5000/)
+
 ## Features
 
 - ✅ **Manage Books & Users** – Add, edit, and delete books and user records.
@@ -20,6 +22,6 @@ The **Library Management System** is a simple yet powerful web application that 
 
 ## Usage
 
-- 1️⃣ Open the web app in your browser.
+- 1️⃣ Open the web app in your browser: [Library Management System](http://147.135.209.140:5000/)
 - 2️⃣ Navigate through the sections using the buttons.
 - 3️⃣ Add books, manage users, and perform borrowing operations.
