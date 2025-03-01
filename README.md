@@ -15,22 +15,8 @@ The **Library Management System** is a simple yet powerful web application that 
 
 - **Backend:** Flask (Python)
 - **Frontend:** HTML, CSS, Bootstrap
-- **Database:** SQLite (or any other DBMS)
+- **Database:** MySQL
 
-
-## Project Structure
-
-```
-library-management/ │── static/
-│ ├── style.css # Stylesheet for UI
-│── templates/
-│ ├── index.html # Main homepage
-│ ├── manage.html # Books & Users management
-│ ├── borrow.html # Borrowing & returning books
-│── app.py # Flask application
-│── requirements.txt # Dependencies
-│── README.md # Project documentation
-```
 
 ## Usage
 
