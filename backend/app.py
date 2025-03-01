@@ -1,28 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
-from database import add_book, add_user, get_books, get_users, borrow_book, return_book, export_loans
-import sqlite3
+import os
+from database import connect, add_user, add_book, get_books, get_users, borrow_book, return_book, export_loans
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 
-DATABASE = "library.db"
-
 @app.route('/')
 def index():
+    """Render homepage."""
     return render_template('index.html')
 
 @app.route('/manage', methods=['GET', 'POST'])
 def manage():
+    """Manage users and books."""
     if request.method == 'POST':
         if 'add_user' in request.form:
             user_name = request.form.get('user_name')
             user_email = request.form.get('user_email')
+
             if user_name and user_email:
-                with sqlite3.connect(DATABASE) as conn:
-                    cursor = conn.cursor()
-                    cursor.execute("INSERT INTO users (name, email) VALUES (?, ?)", (user_name, user_email))
-                    conn.commit()
-                flash("User added successfully!", "success")
+                try:
+                    add_user(user_name, user_email)
+                    flash("User added successfully!", "success")
+                except Exception as e:
+                    flash(f"Error adding user: {e}", "error")
             else:
                 flash("Please fill in all fields.", "error")
 
@@ -30,88 +31,88 @@ def manage():
             book_title = request.form.get('book_title')
             book_author = request.form.get('book_author')
             book_isbn = request.form.get('book_isbn')
+
             if book_title and book_author and book_isbn:
-                with sqlite3.connect(DATABASE) as conn:
-                    cursor = conn.cursor()
-                    cursor.execute("INSERT INTO books (title, author, isbn) VALUES (?, ?, ?)", (book_title, book_author, book_isbn))
-                    conn.commit()
-                flash("Book added successfully!", "success")
+                try:
+                    add_book(book_title, book_author, book_isbn)
+                    flash("Book added successfully!", "success")
+                except Exception as e:
+                    flash(f"Error adding book: {e}", "error")
             else:
                 flash("Please fill in all fields.", "error")
 
         return redirect(url_for('manage'))
 
-    return render_template('manage.html')
+    users = get_users()
+    books = get_books()
+
+    return render_template('manage.html', users=users, books=books)
 
 @app.route('/borrow', methods=['GET', 'POST'])
 def borrow():
+    """Handle book borrowing and returning."""
     if request.method == 'POST':
         action = request.form.get('action')
         user_id = request.form.get('user_id')
         book_id = request.form.get('book_id')
         loan_id = request.form.get('loan_id')
 
-        with sqlite3.connect(DATABASE) as conn:
-            cursor = conn.cursor()
+        if action == "borrow" and user_id and book_id:
+            try:
+                borrow_book(user_id, book_id)
+                flash("Book borrowed successfully!", "success")
+            except Exception as e:
+                flash(f"Error borrowing book: {e}", "error")
 
-            if action == "borrow":
-                if user_id and book_id:
-                    # Sprawdzamy, czy książka jest dostępna (available = 1)
-                    cursor.execute("SELECT available FROM books WHERE id = ?", (book_id,))
-                    is_available = cursor.fetchone()
+        elif action == "return" and loan_id:
+            try:
+                # Fetch book_id from loan_id
+                conn = connect()
+                cursor = conn.cursor()
+                cursor.execute("SELECT book_id FROM loans WHERE id = %s", (loan_id,))
+                loan = cursor.fetchone()
+                conn.close()
 
-                    if not is_available or is_available[0] == 0:
-                        flash("This book is already borrowed!", "error")
-                    else:
-                        # Wypożyczamy książkę
-                        cursor.execute("INSERT INTO loans (user_id, book_id, loan_date) VALUES (?, ?, DATE('now'))",
-                                       (user_id, book_id))
-                        # Ustawiamy `available = 0`
-                        cursor.execute("UPDATE books SET available = 0 WHERE id = ?", (book_id,))
-                        conn.commit()
-                        flash("Book borrowed successfully!", "success")
-                else:
-                    flash("Please select both user and book.", "error")
-
-            elif action == "return":
-                if loan_id:
-                    # Pobieramy book_id przed usunięciem rekordu z loans
-                    cursor.execute("SELECT book_id FROM loans WHERE id = ?", (loan_id,))
-                    book_id = cursor.fetchone()[0]
-
-                    # Usuwamy wypożyczenie
-                    cursor.execute("DELETE FROM loans WHERE id = ?", (loan_id,))
-                    # Ustawiamy `available = 1`
-                    cursor.execute("UPDATE books SET available = 1 WHERE id = ?", (book_id,))
-                    conn.commit()
+                if loan:
+                    book_id = loan[0]
+                    return_book(book_id)
                     flash("Book returned successfully!", "success")
                 else:
-                    flash("Please select a loan to return.", "error")
+                    flash("Invalid loan selected.", "error")
+            except Exception as e:
+                flash(f"Error returning book: {e}", "error")
 
         return redirect(url_for('borrow'))
 
-    # Pobieramy użytkowników, dostępne książki oraz wypożyczone książki
-    with sqlite3.connect(DATABASE) as conn:
-        cursor = conn.cursor()
-        users = cursor.execute("SELECT id, name FROM users").fetchall()
-        books = cursor.execute("SELECT id, title FROM books WHERE available = 1").fetchall()
-        loans = cursor.execute("""
-            SELECT loans.id, books.title, users.name
-            FROM loans
-            JOIN books ON loans.book_id = books.id
-            JOIN users ON loans.user_id = users.id
-        """).fetchall()
+    users = get_users()
+    books = get_books()
+
+    # Fetch active loans for return dropdown
+    conn = connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT loans.id, books.title, users.name, books.id as book_id
+        FROM loans
+        JOIN books ON loans.book_id = books.id
+        JOIN users ON loans.user_id = users.id
+        WHERE loans.return_date IS NULL
+    """)
+    loans = cursor.fetchall()
+    conn.close()
 
     return render_template('borrow.html', users=users, books=books, loans=loans)
 
+
 @app.route('/export', methods=['GET', 'POST'])
 def export():
+    """Export loans data."""
     if request.method == 'POST':
         start_date = request.form['start_date']
         end_date = request.form['end_date']
         file_path = export_loans(start_date, end_date)
         return send_file(file_path, as_attachment=True)
+
     return render_template('export.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
