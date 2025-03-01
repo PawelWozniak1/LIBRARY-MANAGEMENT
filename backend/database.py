@@ -1,13 +1,17 @@
 import mysql.connector
 import os
 import pandas as pd  # Import pandas for exporting data
+from urllib.parse import urlparse
 
-# Corrected DB configuration
+# Parse DATABASE_URL from environment variable
+db_url = urlparse(os.getenv("DATABASE_URL"))
+
+# DB configuration using parsed values
 DB_CONFIG = {
-    "host": "127.0.0.1",  # Use "db" as MySQL service name
-    "user": "root",
-    "password": "mauFJcuf5dhRMQrjj",
-    "database": "library",
+    "host": db_url.hostname,
+    "user": db_url.username,
+    "password": db_url.password,
+    "database": db_url.path.lstrip("/"),
 }
 
 def connect():

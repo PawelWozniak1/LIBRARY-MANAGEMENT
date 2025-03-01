@@ -13,6 +13,21 @@ services:
     volumes:
       - db:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    build: .
+    restart: always
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=mysql://root:mauFJcuf5dhRMQrjj@db:3306/library
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=mauFJcuf5dhRMQrjj
+      - DB_NAME=library
+
 volumes:
   db:
     driver: local
